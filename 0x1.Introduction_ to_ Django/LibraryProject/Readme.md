@@ -1,1 +1,1 @@
-# django models
+# The Library Project
