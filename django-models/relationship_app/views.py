@@ -1,8 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from .models import Book 
 from .models import Library
-from . forms import CreateUserForm 
 
 
 # Create your views here.
@@ -29,18 +28,36 @@ class LibraryDetailView(DetailView):
         return context
     
 
-def login(request):
-    return render(request, 'relationship_app/login.html')
+# def login(request):
+#     return render(request, 'relationship_app/login.html')
 
-def register(request):
-    form = CreateUserForm()
-    if request.method == 'POST':
+# def register(request):
+#     form = CreateUserForm()
+#     if request.method == 'POST':
 
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            redirect('login')
-    return render(request, 'relationship_app/register.html')
+#         form = CreateUserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             redirect('login')
+#     return render(request, 'relationship_app/register.html')
 
-def logout(request):
-    return render(request, 'relationship_app/logout.html')
+# def logout(request):
+#     return render(request, 'relationship_app/logout.html')
+
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
+
+
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def profile_view(request):
+    # This view can only be accessed by authenticated users
+    return render(request, 'profile.html')
