@@ -1,11 +1,11 @@
 from django.urls import path
-from .views import list_books, register, login, logout
+from . import views
 from .views import LibraryDetailView
 
 urlpatterns = [
-    path('books/', list_books, name='list_books'),
-    path('register', register, name='register'),
-    path('login', login, name='login'),
-    path('logout', logout, name='logout'),
+    path('books/', views.list_books, name='list_books'),
+    path('register', views.register, name='register'),
+    path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
 ]
