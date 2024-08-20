@@ -107,13 +107,13 @@ def Member(user):
     return user.userprofile.role == 'Member'
 
 @user_passes_test(Admin)
-def admin(request):
+def Admin(request):
     return render(request, 'admin.html')  # Replace with your actual template
 
 @user_passes_test(Librarian)
-def librarian(request):
+def Librarian(request):
     return render(request, 'librarian.html')  # Replace with your actual template
 
 @user_passes_test(Member)
-def member(request):
+def Member(request):
     return render(request, 'member.html')  # Replace with your actual template
