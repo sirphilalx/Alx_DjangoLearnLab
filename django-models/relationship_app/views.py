@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from .models import Book 
 from .models import Library
+from .forms import CreateUserForm, LoginForm
 
+# authentication models and functions
+from django.contrib.auth.models import auth
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def list_books(request):
@@ -28,36 +32,43 @@ class LibraryDetailView(DetailView):
         return context
     
 
-# def login(request):
-#     return render(request, 'relationship_app/login.html')
+def login(request):
+    form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-# def register(request):
-#     form = CreateUserForm()
-#     if request.method == 'POST':
+            # authenticate users
+            user = authenticate(username=username, password=password)
 
-#         form = CreateUserForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             redirect('login')
-#     return render(request, 'relationship_app/register.html')
+            if user is not None:
 
-# def logout(request):
-#     return render(request, 'relationship_app/logout.html')
+                auth.login(request, user)
 
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
-
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+                return redirect('books/')
+    
+    context = {'form':form}
 
 
+    return render(request, 'relationship_app/login.html', context=context)
 
-from django.contrib.auth.decorators import login_required
+def register(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
 
-@login_required
-def profile_view(request):
-    # This view can only be accessed by authenticated users
-    return render(request, 'profile.html')
+        form = CreateUserForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        
+    context = {'form': form}
+
+    return render(request, 'relationship_app/register.html', context=context)
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')

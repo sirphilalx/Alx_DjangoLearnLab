@@ -1,19 +1,17 @@
-# from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.models import User
 
-# class CreateUserForm(UserCreationForm):
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from django import forms
+from django.forms.widgets import PasswordInput, TextInput
+class CreateUserForm(UserCreationForm):
 
-#     class Meta:
-#         models = User
-#         fields = ['username', 'email', 'password1', 'password2']
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
-# Add this to previous list of imports
+        
 
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
+class LoginForm(AuthenticationForm):
 
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+    username = forms.CharField(widget=TextInput())
+    password = forms.CharField(widget=PasswordInput())
