@@ -107,13 +107,13 @@ def is_member(user):
     return user.userprofile.role == 'Member'
 
 @user_passes_test(is_admin)
-def admin_dashboard(request):
-    return render(request, 'admin_dashboard.html')  # Replace with your actual template
+def admin(request):
+    return render(request, 'admin.html')  # Replace with your actual template
 
 @user_passes_test(is_librarian)
-def librarian_dashboard(request):
-    return render(request, 'librarian_dashboard.html')  # Replace with your actual template
+def librarian(request):
+    return render(request, 'librarian.html')  # Replace with your actual template
 
 @user_passes_test(is_member)
-def member_dashboard(request):
-    return render(request, 'member_dashboard.html')  # Replace with your actual template
+def member(request):
+    return render(request, 'member.html')  # Replace with your actual template
