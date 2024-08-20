@@ -11,6 +11,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login, logout
 
+# importing modules for creating profile models
+from django.contrib.auth.decorators import login_required
+
+# using the user passes test decorators
+from django.contrib.auth.decorators import user_passes_test
+
+
 # Create your views here.
 def list_books(request):
     books = Book.objects.all()
@@ -76,3 +83,37 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+
+# creating profile views 
+
+@login_required
+def profile(request):
+    return render(request, 'relationship_app/profile.html')
+
+
+
+
+# Check if the user is an Admin
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
+
+# Check if the user is a Librarian
+def is_librarian(user):
+    return user.userprofile.role == 'Librarian'
+
+# Check if the user is a Member
+def is_member(user):
+    return user.userprofile.role == 'Member'
+
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    return render(request, 'admin_dashboard.html')  # Replace with your actual template
+
+@user_passes_test(is_librarian)
+def librarian_dashboard(request):
+    return render(request, 'librarian_dashboard.html')  # Replace with your actual template
+
+@user_passes_test(is_member)
+def member_dashboard(request):
+    return render(request, 'member_dashboard.html')  # Replace with your actual template
