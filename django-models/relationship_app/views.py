@@ -60,6 +60,7 @@ def login(request):
 def register(request):
     form = CreateUserForm()
     if request.method == 'POST':
+        forms = UserCreationForm()
 
         form = CreateUserForm(request.POST)
 
