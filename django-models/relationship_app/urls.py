@@ -10,4 +10,6 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
+    path(LogoutView.as_view(template_name="logout") ),
+    path(LoginView.as_view(template_name='login'))
 ]
