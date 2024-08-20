@@ -95,25 +95,25 @@ def profile(request):
 
 
 # Check if the user is an Admin
-def is_admin(user):
+def Admin(user):
     return user.userprofile.role == 'Admin'
 
 # Check if the user is a Librarian
-def is_librarian(user):
+def Librarian(user):
     return user.userprofile.role == 'Librarian'
 
 # Check if the user is a Member
-def is_member(user):
+def Member(user):
     return user.userprofile.role == 'Member'
 
-@user_passes_test(is_admin)
+@user_passes_test(Admin)
 def admin(request):
     return render(request, 'admin.html')  # Replace with your actual template
 
-@user_passes_test(is_librarian)
+@user_passes_test(Librarian)
 def librarian(request):
     return render(request, 'librarian.html')  # Replace with your actual template
 
-@user_passes_test(is_member)
+@user_passes_test(Member)
 def member(request):
     return render(request, 'member.html')  # Replace with your actual template
