@@ -20,7 +20,7 @@ from django.contrib.auth.decorators import permission_required
 
 
 # Create your views here.
-@permission_required('relationship_app.can_view_book', raise_exception=True)
+@permission_required(['relationship_app.can_view_book', 'relationship_app.can_add_book', 'relationship_app.can_change_book', 'relationship_app.can_delete_book'], raise_exception=True)
 def list_books(request):
     books = Book.objects.all()
 
