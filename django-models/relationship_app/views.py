@@ -16,9 +16,11 @@ from django.contrib.auth.decorators import login_required
 
 # using the user passes test decorators
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 
 # Create your views here.
+@permission_required('relationship_app.can_view_book', raise_exception=True)
 def list_books(request):
     books = Book.objects.all()
 
