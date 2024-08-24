@@ -10,8 +10,8 @@ from .forms import LoginForm
 
 from django.contrib.auth import login
 
-from django.contrib.auth.decorators import user_passes_test, permission_required
-
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 # permission views
 from django.http import HttpResponseForbidden
 from .forms import BookForm 
