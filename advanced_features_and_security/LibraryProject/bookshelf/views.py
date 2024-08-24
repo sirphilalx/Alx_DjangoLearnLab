@@ -2,6 +2,9 @@ from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book
 from .forms import BookForm  # You should define this form in your forms.py
+from .forms import ExampleForm
+
+
 
 @permission_required('relationship_app.can_view_book', raise_exception=True)
 def book_list(request):
