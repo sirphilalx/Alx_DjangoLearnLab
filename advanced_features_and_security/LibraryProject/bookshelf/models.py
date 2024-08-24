@@ -3,12 +3,19 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 # Create your models here.
 class Book(models.Model):
     title = models.CharField(max_length=200, default='Unknown')
     author = models.CharField(max_length=100, default='Unknown')
     publication_year = models.IntegerField(default=1900)
+
+    class Meta:
+        permissions = [
+            ("can_view_book", "Can view book"),
+            ("can_add_book", "Can add book"),
+            ("can_edit_book", "Can edit book"),
+            ("can_delete_book", "Can delete book"),
+        ]
 
     def __str__(self):
         return f"{self.title} by {self.author}"
