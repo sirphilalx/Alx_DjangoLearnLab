@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scoreboard</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-4">
+      <h1 class="text-2xl font-bold mb-4">Scoreboard</h1>
+      <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead>
+          <tr class="bg-gray-300 text-gray-600 text-sm uppercase">
+            <th class="py-2 px-3">Church</th>
+            <th class="py-2 px-3">Stage</th>
+            <th class="py-2 px-3">Round</th>
+            <th class="py-2 px-3">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for score in scores %}
+          <tr class="border-b">
+            <td class="py-2 px-3">{{ score.church.name }}</td>
+            <td class="py-2 px-3">{{ score.round.stage.name }}</td>
+            <td class="py-2 px-3">{{ score.round.round_number }}</td>
+            <td class="py-2 px-3">{{ score.points }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a
+        href="{% url 'home' %}"
+        class="text-blue-500 hover:text-blue-700 mt-4 inline-block"
+        >Back to Home</a
+      >
+    </div>
+  </body>
+</html>
