@@ -11,6 +11,8 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ['id', 'title', 'publication_year', 'author']
 
+    
+
     def validate_publication_year(self, value):
         """Check that the publication year is not in the future."""
         current_year = datetime.now().year
