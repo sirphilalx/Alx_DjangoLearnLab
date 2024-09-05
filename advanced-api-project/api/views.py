@@ -1,5 +1,5 @@
 from rest_framework import generics, filters, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book, Author
 from .serializers import BookSerializer
 from rest_framework.permissions import BasePermission
