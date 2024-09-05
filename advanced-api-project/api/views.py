@@ -2,6 +2,7 @@ from rest_framework import generics, filters, serializers
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book, Author
+from django_filters import rest_framework
 from .serializers import BookSerializer
 from rest_framework.permissions import BasePermission
 from .filters import BookFilter
@@ -20,6 +21,8 @@ class BookListView(generics.ListAPIView):
     filterset_fields = ['title', 'author__name', 'publication_year']
     filterset_class = BookFilter
     search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']  # Fields to order by
+    ordering = ['title']  # Default ordering
 
     def perform_create(self, serializer):
         # Set the author based on the authenticated user
