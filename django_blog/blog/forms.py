@@ -67,6 +67,8 @@ class PostForm(forms.ModelForm):
         if commit:
             instance.save()
 
+            # TagWidget()
+
         # Clear existing tags
         instance.tags.clear()
 
