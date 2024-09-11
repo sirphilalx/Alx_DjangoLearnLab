@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import  DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Post
+from .forms import CommentForm
+from .forms import PostForm
 
 def register(request):
     if request.method == 'POST':
@@ -17,7 +19,7 @@ def register(request):
 
     return render(request, 'registration/register.html', {'form': form})
 
-# @login_required
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
@@ -25,36 +27,71 @@ def profile(request):
 def home(request):
     return render(request, 'home.html')
 
-# @login_required
+@login_required
 # def posts(request):
 #     posts = Post.objects.all().order_by('-created_at')
 #     return render(request, 'post_list.html', {'posts': posts})
 
 
-class PostListView(ListView):
-    model = Post
-    template_name = 'blog/post_list.html'
-    context_object_name = 'posts'
-    ordering = ['-created_at']
-    paginate_by = 10
+def post_list(request):
+    posts = Post.objects.all().order_by('-created_at')
+    return render(request, 'blog/post_list.html', {'posts': posts})
+
+# class PostListView(ListView):
+#     model = Post
+#     template_name = 'blog/post_list.html'
+#     context_object_name = 'posts'
+#     ordering = ['-created_at']
+#     paginate_by = 10
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comments.all()
+        context['comment_form'] = CommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST, author=request.user, post=self.object)
+        if form.is_valid():
+            form.save()
+            return redirect('post-detail', pk=self.object.pk)
+        context = self.get_context_data(object=self.object)
+        context['comment_form'] = form
+        return self.render_to_response(context)
+
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
+    form_class = PostForm
     template_name = 'blog/post_form.html'
-    fields = ['title', 'content']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['author'] = self.request.user
+        return kwargs
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = 'blog/post_form.html'
-    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['author'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.author = self.request.user
