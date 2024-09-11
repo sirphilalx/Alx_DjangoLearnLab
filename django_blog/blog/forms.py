@@ -2,8 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
-from .models import Post
-from .models import Comment
+from .models import Post, Comment, Tag
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -35,19 +34,49 @@ class ProfileUpdateForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+
+    # tags = forms.ModelMultipleChoiceField(
+    #     queryset=Tag.objects.all(),
+    #     widget=forms.CheckboxSelectMultiple,
+    #     required=False
+    # )
+    tags = forms.CharField(required=False, help_text="Enter tags separated by commas")
+
+
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
         
+    # def __init__(self, *args, **kwargs):
+    #     self.author = kwargs.pop('author', None)
+    #     super(PostForm, self).__init__(*args, **kwargs)
+        
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     if self.author:
+    #         cleaned_data['author'] = self.author
+    #     return cleaned_data
     def __init__(self, *args, **kwargs):
-        self.author = kwargs.pop('author', None)
         super(PostForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['tags'].initial = ', '.join([tag.name for tag in self.instance.tags.all()])
+
+    def save(self, commit=True):
+        instance = super(PostForm, self).save(commit=False)
         
-    def clean(self):
-        cleaned_data = super().clean()
-        if self.author:
-            cleaned_data['author'] = self.author
-        return cleaned_data
+        if commit:
+            instance.save()
+
+        # Clear existing tags
+        instance.tags.clear()
+
+        # Add new tags
+        tag_names = [name.strip() for name in self.cleaned_data['tags'].split(',') if name.strip()]
+        for tag_name in tag_names:
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            instance.tags.add(tag)
+
+        return instance
     
 
 # Comment form

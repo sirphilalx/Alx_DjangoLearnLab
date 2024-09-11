@@ -20,6 +20,12 @@
   {% csrf_token %} {{ comment_form.as_p }}
   <button type="submit">Submit Comment</button>
 </form>
-{% else %}
+
+<h3>Tags:</h3>
+{% for tag in post.tags.all %}
+<span class="tag">{{ tag.name }}</span>
+{% empty %}
+<p>No tags for this post.</p>
+{% endfor %}{% else %}
 <p>Please <a href="{% url 'login' %}">log in</a> to add a comment.</p>
 {% endif %} {% endblock %}
