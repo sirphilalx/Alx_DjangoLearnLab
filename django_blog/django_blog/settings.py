@@ -72,6 +72,7 @@ INSTALLED_APPS = [
 ]
 
 # ["USER", "PORT"]
+# taggit
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
