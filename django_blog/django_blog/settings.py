@@ -71,6 +71,8 @@ INSTALLED_APPS = [
     'blog',
 ]
 
+# ["USER", "PORT"]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
