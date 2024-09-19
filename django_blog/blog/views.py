@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from .forms import CommentForm
 from .forms import PostForm
 
