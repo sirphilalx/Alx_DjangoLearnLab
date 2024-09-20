@@ -32,3 +32,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'bio', 'profile_picture')
         read_only_fields = ('username', 'email')
+
+class FollowUserSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
