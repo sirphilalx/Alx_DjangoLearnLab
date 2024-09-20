@@ -6,9 +6,13 @@ from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 
+# Post.objects.filter(author__in=following_users).order_by
+
+
 User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
+    # Post.objects.filter(author__in=following_users).order_by
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
