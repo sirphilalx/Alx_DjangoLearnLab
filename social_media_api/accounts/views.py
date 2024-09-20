@@ -11,6 +11,10 @@ from django.contrib.auth import authenticate
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 from .permissions import IsSelf
 
+# generics.GenericAPIView
+# CustomUser.objects.all()
+
+
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = [AllowAny]
